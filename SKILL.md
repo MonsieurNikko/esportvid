@@ -7,7 +7,7 @@ description: Make faceless esports/gaming shorts in Duy's fixed house style (3D 
 
 Turns a pro play (CS2 / CS:GO / VALORANT / LoL / Overwatch) into a 65–90 s vertical short for TikTok, YouTube Shorts and Reels,
 always in the same channel style. Everything is automated by one engine driven by a `spec.json`.
-Engine repo: `https://github.com/MonsieurNikko/esport-studio` (private). On Windows it lives in `%USERPROFILE%\esport-studio`.
+Engine repo: `https://github.com/MonsieurNikko/esportvid` (private). On Windows it lives in `%USERPROFILE%\esportvid`.
 
 ## Sub-skills (what the user can ask)
 | ask | do |
@@ -26,8 +26,8 @@ Formats (read the guide before writing the script): `formats/guess_the_pro.md`, 
 ## 0. Setup (first time, or if the folder is missing)
 ```
 cd %USERPROFILE%
-git clone https://github.com/MonsieurNikko/esport-studio.git
-cd esport-studio && python setup.py
+git clone https://github.com/MonsieurNikko/esportvid.git
+cd esportvid && python setup.py
 ```
 Otherwise `git pull` in the folder. Needs Python 3.10+, ffmpeg in PATH (`winget install --id Gyan.FFmpeg -e`), Node not required.
 

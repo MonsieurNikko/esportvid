@@ -10,8 +10,8 @@ Games: `cs` · `valorant` · `lol` · `overwatch` (see `games/`).
 
 ## Setup (once)
 ```
-git clone https://github.com/MonsieurNikko/esport-studio.git
-cd esport-studio
+git clone https://github.com/MonsieurNikko/esportvid.git
+cd esportvid
 python setup.py            # deps, headless Chromium, Kokoro voice model, ffmpeg check
 ```
 Windows needs ffmpeg in PATH: `winget install --id Gyan.FFmpeg -e` (then open a new terminal).
