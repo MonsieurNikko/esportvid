@@ -12,7 +12,7 @@ Games: `cs` · `valorant` · `lol` · `overwatch` (see `games/`).
 ```
 git clone https://github.com/MonsieurNikko/esportvid.git
 cd esportvid
-python setup.py            # deps, headless Chromium, Kokoro voice model, ffmpeg check
+python setup.py --gpu      # deps, headless Chromium, Chatterbox (CUDA) + Kokoro fallback, ffmpeg check
 ```
 Windows needs ffmpeg in PATH: `winget install --id Gyan.FFmpeg -e` (then open a new terminal).
 
@@ -29,7 +29,8 @@ python -m engine.cli build episodes\02_coldzera\spec.json            # full rend
 | path | what |
 |---|---|
 | `engine/style.py` | the locked house style (palette, fonts, captions, chips) — do not change per episode |
-| `engine/voice.py` | Kokoro narration (speed 1.0, cached per line) |
+| `engine/voice.py` | narration: Chatterbox (emotion intensity + [gasp]/[sigh] reactions) or Kokoro fallback, cached per line — see docs/voice.md |
+| `engine/music.py` | signature score arranged on the timeline (logo sting, build, theme, riser, silence, reveal motif) |
 | `engine/timeline.py` | voice-driven timeline, time refs like `B8+0.8` |
 | `engine/web/stage.html` + `engine/stage.py` | 3D intro (three.js in headless Chromium) |
 | `engine/radar.py` | top-down radar renderer |

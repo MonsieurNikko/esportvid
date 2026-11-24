@@ -27,7 +27,7 @@ Formats (read the guide before writing the script): `formats/guess_the_pro.md`, 
 ```
 cd %USERPROFILE%
 git clone https://github.com/MonsieurNikko/esportvid.git
-cd esportvid && python setup.py
+cd esportvid && python setup.py --gpu
 ```
 Otherwise `git pull` in the folder. Needs Python 3.10+, ffmpeg in PATH (`winget install --id Gyan.FFmpeg -e`), Node not required.
 
@@ -42,7 +42,10 @@ Otherwise `git pull` in the folder. Needs Python 3.10+, ffmpeg in PATH (`winget 
 3. **Script** from the format guide: second person "you" (Guess the Pro / Predict) or third person (Play That Changed /
    Scandals), ≤ 12 words per line, one idea per line, 65–90 s total. `say` = spoken spelling ("Get Right", "Forest",
    "sixteen to fourteen"), `cap` = written form ("GeT_RiGhT", "16–14"). Never a one-word line, never a line starting with "…".
-   Show the script to the user before rendering when they are present.
+   **Direct the voice** on every line (`docs/voice.md`): `emo` (calm/serious/tense/excited/shock/hype) and optional `intensity`
+   0–1, plus at most one reaction tag like `[sigh]` or `[gasp]` where a human narrator would react. Rising intensity across
+   the kills, `tense` before the reveal, `hype` on the answer. The user can edit these fields directly.
+   Show the script (with emo/intensity) to the user before rendering when they are present.
 4. **Spec.** Copy the closest example (`examples/*/spec.json`) into `episodes/<NN>_<slug>/spec.json` and edit it
    (reference: `docs/spec_schema.md`). Trace the radar: lanes, covered areas, bomb/objective zones, crates, labels in the
    radar image's pixel coordinates, then set `map.transform` so the action fills the panel. All event times are refs to
@@ -52,12 +55,15 @@ Otherwise `git pull` in the folder. Needs Python 3.10+, ffmpeg in PATH (`winget 
    `python -m engine.cli build episodes\<ep>\spec.json --stills 2,8,15,30,45,60,70` → open the stills, check: nothing cropped,
    no text over text, names readable, kill feed correct, captions on ≤ 2 lines. Fix the spec, repeat.
 6. **Render:** `python -m engine.cli build episodes\<ep>\spec.json` → `<out>.mp4` + `publish.md` in the episode folder.
+   Voice-only tweaks afterwards: edit the lines, then `... build spec.json --audio-only` (re-mixes without re-rendering frames).
 7. **Deliver:** the mp4, the publish kit (2–3 titles "[what happened] [game]", description with a question, hashtags, pinned
    comment), and the sources. Update `episodes/index.md` (number, subject, format, game, date) so episode numbers never repeat.
 
 ## Locked style (do not change per episode)
 `engine/style.py` (palette, Anton/Inter fonts, caption look, chips), the series tag on top, the 3D stage look, the radar look,
-synthesized sound (no licensed music), voice `am_michael` at speed 1.0. A new idea = a new spec or a new format guide, not new
+the signature score "theme C" (`engine/music.py`: same A-minor bell motif in every video, logo sting at 0 s, build in the
+context, full theme in the action, 0.4 s silence then the motif on the reveal, hard cut that loops), music ~15–20 % of the voice,
+voice engine Chatterbox (`python setup.py --gpu`) with Kokoro fallback. A new idea = a new spec or a new format guide, not new
 colours. If the user asks for a style change, change it in the engine for every future episode and say so.
 
 ## Platform and monetization rules

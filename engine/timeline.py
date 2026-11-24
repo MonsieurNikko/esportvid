@@ -34,7 +34,7 @@ class Timeline:
         for ln in lines:
             cursor += ln.get('gap', 0.0 if first else g)
             d = self.durs[ln['id']]
-            self.lines[ln['id']] = dict(t=cursor, d=d, end=cursor + d, cap=ln.get('cap', ln['say']), role=ln.get('role'), section=sec_idx)
+            self.lines[ln['id']] = dict(t=cursor, d=d, end=cursor + d, cap=ln.get('cap', __import__('re').sub(r'\s*\[[^\]]+\]\s*', ' ', ln['say']).strip()), role=ln.get('role'), section=sec_idx)
             cursor += d; first = False
         return cursor
 

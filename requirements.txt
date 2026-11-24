@@ -4,3 +4,4 @@ scipy>=1.11
 playwright>=1.45
 kokoro-onnx>=0.4
 soundfile>=0.12
+# GPU voice (optional, recommended on NVIDIA): installed by setup.py --gpu

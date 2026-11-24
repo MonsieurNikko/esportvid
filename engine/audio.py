@@ -65,22 +65,6 @@ class Mixer:
 
 def build_audio(tl, game, workdir, out_wav, mood='default'):
     D = tl.duration; m = Mixer(D)
-    x = np.arange(m.N) / SR
-    drone = (0.5 * np.sin(2 * np.pi * 55 * x) + 0.35 * np.sin(2 * np.pi * 55.35 * x)
-             + 0.22 * np.sin(2 * np.pi * 82.41 * x) * (0.6 + 0.4 * np.sin(2 * np.pi * 0.13 * x))
-             + 0.12 * np.sin(2 * np.pi * 164.8 * x) * (0.5 + 0.5 * np.sin(2 * np.pi * 0.07 * x)))
-    if mood == 'dark': drone = drone * 0.8 + 0.25 * np.sin(2 * np.pi * 58.27 * x)  # minor-second rub = unease
-    bed = drone + m.lp(m.rng.standard_normal(m.N), 380) * 0.9
-    pts = [(0, 0.0), (0.5, 0.2)]
-    for s in tl.sections:
-        lv = {'cold_open': .22, 'rewind': .16, 'context': .18, 'radar': .2, 'cards': .17, 'predict': .24, 'clue': .15, 'reveal': .15}[s['type']]
-        pts += [(s['t0'] + 0.01, lv), (s['t1'] - 0.01, lv)]
-        if s['type'] == 'radar' and s['spec'].get('heartbeat'):
-            a, b = tl.ref(s['spec']['heartbeat'][0], s), tl.ref(s['spec']['heartbeat'][1], s); pts += [(a, .22), (b, .32), (b + 1.5, .2)]
-        if s['type'] == 'reveal':
-            pts += [(s['R0'] - 0.05, .27), (s['R0'], 0.0), (s['R0'] + 0.5, 0.0), (s['R0'] + 1.6, .12)]
-    pts = sorted(pts) + [(D, 0.0)]
-    bed *= np.interp(x, [p[0] for p in pts], [p[1] for p in pts]); m.L += bed; m.R += bed
     wcls = game.get('weapon_class', {}); dcls = game.get('default_weapon_class', 'rifle')
     for i, s in enumerate(tl.sections):
         S, t0, t1, ty = s['spec'], s['t0'], s['t1'], s['type']
@@ -141,9 +125,18 @@ def build_audio(tl, game, workdir, out_wav, mood='default'):
     for lid, L in tl.lines.items():
         sr_, s = wavfile.read(Path(workdir) / 'vo' / f'{lid}.wav'); s = s.astype(np.float64) / 32768
         i0 = int(L['t'] * SR); s = s[:max(0, m.N - i0)]; vo[i0:i0 + len(s)] += s
-    st = np.stack([m.L, m.R], 1); st = np.tanh(st * 1.3) / np.tanh(1.3); st /= np.max(np.abs(st)) / 0.89
+    # signature score arranged on the timeline (engine/music.py)
+    from .music import score
+    mus = score(tl, mood)[:m.N]; mus = np.pad(mus, (0, m.N - len(mus)))
+    active = np.abs(vo) > 0.02
+    v_rms = np.sqrt(np.mean(vo[active] ** 2)) if active.any() else 0.2
+    m_rms = np.sqrt(np.mean(mus ** 2)) or 1.0
+    mus = mus / m_rms * v_rms * 0.36            # ~0.36 of the voice when alone, ~0.18 (15-20 %) under the voice
+    sfx = np.stack([m.L, m.R], 1); sfx = np.tanh(sfx * 1.3) / np.tanh(1.3)
+    sfx = sfx / (np.max(np.abs(sfx)) or 1) * 0.7
     win = int(0.12 * SR); env = np.convolve(np.abs(vo), np.ones(win) / win, mode='same')
-    out = st * 0.75 * (1 - 0.5 * np.clip(env / 0.05, 0, 1))[:, None] + vo[:, None] * 0.98
-    out /= np.max(np.abs(out)) / 0.92
-    f = int(0.4 * SR); out[-f:] *= np.linspace(1, 0, f)[:, None]
+    duck = 1 - 0.5 * np.clip(env / 0.05, 0, 1)
+    out = (mus * duck)[:, None] + sfx * (1 - 0.25 * np.clip(env / 0.05, 0, 1))[:, None] + vo[:, None] * 0.98
+    out = np.tanh(out * 1.1) / np.tanh(1.1); out /= np.max(np.abs(out)) / 0.92
+    f = int(0.03 * SR); out[-f:] *= np.linspace(1, 0, f)[:, None]
     wavfile.write(out_wav, SR, (out * 32767).astype(np.int16))

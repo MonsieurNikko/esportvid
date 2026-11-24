@@ -22,11 +22,11 @@ def load_all(spec_path, workdir, synth=True):
     lines = all_lines(spec)
     ids = [l['id'] for l in lines]; dup = {i for i in ids if ids.count(i) > 1}
     if dup: raise ValueError(f'duplicate line ids: {dup}')
-    if synth: durs = voice.synth_lines(lines, workdir, spec.get('voice', {}).get('voice', 'am_michael'))
+    if synth: durs = voice.synth_lines(lines, workdir, spec.get('voice', {}))
     else: durs = {k: v['d'] for k, v in json.loads((Path(workdir) / 'vo' / 'cache.json').read_text()).items()}
     return spec, Timeline(spec, durs), game
 
-def build(spec_path, workers=2, stills=None):
+def build(spec_path, workers=2, stills=None, audio_only=False):
     spec_path = Path(spec_path).resolve(); wd = spec_path.parent / 'build'; wd.mkdir(exist_ok=True)
     t0 = time.time()
     print('[1/6] voice', flush=True); spec, tl, game = load_all(spec_path, wd)
@@ -44,13 +44,16 @@ def build(spec_path, workers=2, stills=None):
     print('[4/6] sound', flush=True)
     from .audio import build_audio
     build_audio(tl, game, wd, str(wd / 'mix.wav'), mood)
-    print('[5/6] frames', flush=True)
     N = int(round(tl.duration * FPS)); step = 150; jobs = []
     (wd / 'parts').mkdir(exist_ok=True)
     for i, n0 in enumerate(range(0, N, step)):
         jobs.append((str(spec_path), str(wd), n0, min(N, n0 + step), str(wd / 'parts' / f'p{i:03d}.mp4')))
-    with Pool(workers) as pool:
-        for k, out in enumerate(pool.imap(render_range, jobs)): print(f'  part {k + 1}/{len(jobs)}', flush=True)
+    if audio_only and all(Path(j[4]).exists() for j in jobs):
+        print('[5/6] frames: reusing existing parts (--audio-only)', flush=True)
+    else:
+        print('[5/6] frames', flush=True)
+        with Pool(workers) as pool:
+            for k, out in enumerate(pool.imap(render_range, jobs)): print(f'  part {k + 1}/{len(jobs)}', flush=True)
     (wd / 'parts.txt').write_text(''.join(f"file '{Path(j[4]).as_posix()}'\n" for j in jobs))
     print('[6/6] mux + compress', flush=True)
     name = spec['meta'].get('out', spec_path.parent.name)
@@ -66,9 +69,10 @@ def main():
     ap = argparse.ArgumentParser(); sub = ap.add_subparsers(dest='cmd', required=True)
     b = sub.add_parser('build'); b.add_argument('spec'); b.add_argument('--workers', type=int, default=max(1, (os.cpu_count() or 2) - 1))
     b.add_argument('--stills', default=None, help='comma-separated times to preview instead of rendering')
+    b.add_argument('--audio-only', action='store_true', help='rebuild voice/music/mix, reuse rendered frames')
     t = sub.add_parser('timeline'); t.add_argument('spec')
     a = ap.parse_args()
-    if a.cmd == 'build': build(a.spec, a.workers, a.stills.split(',') if a.stills else None)
+    if a.cmd == 'build': build(a.spec, a.workers, a.stills.split(',') if a.stills else None, a.audio_only)
     elif a.cmd == 'timeline':
         wd = Path(a.spec).resolve().parent / 'build'; wd.mkdir(exist_ok=True); _, tl, _ = load_all(a.spec, wd); print(tl.report())
         for lid, L in sorted(tl.lines.items(), key=lambda kv: kv[1]['t']): print(f"  {lid:<5} {L['t']:6.2f} +{L['d']:.2f}  {L['cap']}")
