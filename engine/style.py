@@ -131,11 +131,20 @@ def chip(fr, d, txt, colour, y, s, al, size=72):
     blit(fr, img, W / 2, y, s, al)
 
 def watermark(fr, handle, accent):
-    """Channel handle, small and semi-transparent, bottom-left of the radar panel: outside TikTok/Shorts/Reels UI zones
-    (top tabs, right action rail, bottom-left caption block)."""
+    """Channel mark = small reticle (brand icon) + handle, semi-transparent, bottom-left of the radar panel:
+    outside TikTok/Shorts/Reels UI zones (top tabs, right action rail, bottom-left caption block)."""
     if not handle: return
-    img = text_img(handle, F(INTER_K, 28), WHITE, stroke=2, shadow=False)
-    blit(fr, img, 84, 1318, 1, 0.55, anchor='l')
+    key = ('wm', handle, accent)
+    if key not in _cache:
+        txt = text_img(handle, F(INTER_K, 28), WHITE, stroke=2, shadow=False)
+        im = Image.new('RGBA', (txt.width + 50, max(txt.height, 60)), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+        cx, cy, r = 26, im.height / 2, 14
+        d.ellipse((cx - r, cy - r, cx + r, cy + r), outline=accent + (255,), width=3)
+        for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            d.line((cx + dx * r * 0.6, cy + dy * r * 0.6, cx + dx * r * 1.45, cy + dy * r * 1.45), fill=accent + (255,), width=3)
+        d.ellipse((cx - 3, cy - 3, cx + 3, cy + 3), fill=accent + (255,))
+        im.paste(txt, (34, int((im.height - txt.height) / 2)), txt); _cache[key] = im
+    blit(fr, _cache[key], 84, 1316, 1, 0.6, anchor='l')
 
 def crosshair_bg(d, t, a=16):
     cx, cy = W / 2, 900; r = 330 + 10 * math.sin(t * 0.8)
