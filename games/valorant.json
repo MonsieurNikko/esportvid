@@ -1,0 +1,11 @@
+{
+  "name": "VALORANT",
+  "hero_color": [255, 84, 84], "opp_color": [80, 220, 200],
+  "objective": "SPIKE", "armor_text": "SHIELD 0",
+  "default_weapon": "VANDAL", "default_weapon_class": "rifle", "hero_long_gun": false,
+  "weapon_class": {"OPERATOR": "sniper", "OUTLAW": "sniper", "MARSHAL": "sniper", "VANDAL": "rifle", "PHANTOM": "rifle", "GUARDIAN": "rifle", "BULLDOG": "rifle",
+                   "SPECTRE": "rifle", "ODIN": "rifle", "ARES": "rifle", "SHERIFF": "pistol", "GHOST": "pistol", "CLASSIC": "pistol", "FRENZY": "pistol",
+                   "JUDGE": "shotgun", "BUCKY": "shotgun", "ABILITY": "ability", "ULT": "ability", "KNIFE": "ability"},
+  "sources_hint": "vlr.gg (matches, stats), Liquipedia VALORANT (events, rosters)",
+  "radar_hint": "Use the official minimap layout. Attackers are the hero side by default (swap colours in game_overrides if the hero defends)."
+}

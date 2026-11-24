@@ -1,0 +1,228 @@
+{
+ "meta": {
+  "format": "esports_scandals",
+  "game": "cs",
+  "series": "ESPORTS SCANDALS",
+  "episode": 1,
+  "mood": "dark",
+  "out": "Scandals_01_Olofboost",
+  "highlight": {
+   "fnatic": "t",
+   "LDLC": "ct",
+   "Overpass": "gold",
+   "forfeited": "red",
+   "replayed": "red"
+  },
+  "base_hashtags": [
+   "#cs2",
+   "#csgo",
+   "#counterstrike",
+   "#esports",
+   "#shorts"
+  ]
+ },
+ "voice": {
+  "voice": "am_michael"
+ },
+ "sources": [
+  "Wikipedia — Olofboost / DreamHack Winter 2014",
+  "GosuGamers — DreamHack Winter 2014 coverage (Nov 2014)",
+  "GameSpot — Fnatic forfeits after map exploit",
+  "GosuGamers — 'DreamHack admins rule fnatic's Overpass boost illegal' (texture transparency ruling, protest & counter-protest)"
+ ],
+ "publish": {
+  "titles": [
+   "The boost that made fnatic forfeit a Major (CS:GO)",
+   "Olofboost: the most controversial round in CS:GO history"
+  ],
+  "description": "Down 3–12 at a Major, then 13 rounds in a row. Was the forfeit fair? 👇",
+  "hashtags": [
+   "#fnatic",
+   "#olofmeister"
+  ],
+  "pinned": "Fair or not? Next scandal? 👇"
+ },
+ "sections": [
+  {
+   "type": "cold_open",
+   "enemies": 1,
+   "title3d": "FORFEIT",
+   "punch_text": "IT WAS A BOOST.",
+   "lines": [
+    {
+     "id": "A1",
+     "say": "Down three to twelve at a Major. Then thirteen rounds in a row.",
+     "cap": "Down 3–12 at a Major. Then 13 rounds in a row."
+    },
+    {
+     "id": "A2",
+     "say": "It was a boost.",
+     "role": "punch"
+    }
+   ]
+  },
+  {
+   "type": "rewind"
+  },
+  {
+   "type": "context",
+   "beats": [
+    {
+     "kind": "score",
+     "text3d": "3 - 12",
+     "sub3d": "HALF TIME",
+     "color": "t",
+     "chip": "DREAMHACK WINTER 2014 · QUARTERFINAL",
+     "chip_color": "white",
+     "chip_size": 54,
+     "lines": [
+      {
+       "id": "A3",
+       "say": "November twenty-fourteen. DreamHack Winter, a Major.",
+       "cap": "November 2014. DreamHack Winter, a Major."
+      }
+     ]
+    },
+    {
+     "kind": "lineup",
+     "names": [
+      "Happy",
+      "kioShiMa",
+      "NBK",
+      "shox",
+      "SmithZz"
+     ],
+     "color": "ct",
+     "chip": "TEAM LDLC",
+     "chip_size": 80,
+     "facts": [
+      "DECIDING MAP: OVERPASS"
+     ],
+     "lines": [
+      {
+       "id": "A4",
+       "say": "Fnatic against Team LDLC. Deciding map: Overpass.",
+       "cap": "fnatic against Team LDLC. Deciding map: Overpass."
+      }
+     ]
+    },
+    {
+     "kind": "alarm",
+     "text3d": "13 IN A ROW",
+     "color": "red",
+     "chip": "FNATIC WIN 16 – 13",
+     "chip_size": 62,
+     "lines": [
+      {
+       "id": "A5",
+       "say": "Then a hidden spot. Thirteen rounds in a row. Sixteen to thirteen.",
+       "cap": "Then a hidden spot. 13 rounds in a row. 16–13."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "type": "cards",
+   "cards": [
+    {
+     "kicker": "THE SPOT",
+     "headline": "PIXEL BOOST",
+     "sub": "A hidden ledge, seeing through the textures",
+     "color": "red",
+     "lines": [
+      {
+       "id": "C0",
+       "say": "Olofmeister was boosted onto a hidden ledge. From there, he could see through the textures.",
+       "cap": "olofmeister was boosted onto a hidden ledge. From there, he could see through the textures."
+      }
+     ],
+     "hold": 1.7
+    },
+    {
+     "kicker": "THE PROTEST",
+     "headline": "LDLC PROTEST",
+     "sub": "fnatic answer with a counter-protest",
+     "color": "ct",
+     "lines": [
+      {
+       "id": "C0b",
+       "say": "LDLC filed a protest. Fnatic answered with a counter-protest.",
+       "cap": "LDLC filed a protest. fnatic answered with a counter-protest."
+      }
+     ],
+     "hold": 1.7
+    },
+    {
+     "kicker": "THE RULING",
+     "headline": "REPLAY THE MAP",
+     "sub": "DreamHack orders Overpass to be replayed",
+     "color": "red",
+     "lines": [
+      {
+       "id": "C1",
+       "say": "The admins ruled it illegal, and ordered the map replayed.",
+       "cap": "The admins ruled it illegal, and ordered the map replayed."
+      }
+     ],
+     "hold": 1.7
+    },
+    {
+     "kicker": "THE BACKLASH",
+     "headline": "BACKLASH",
+     "sub": "Fans and players turn on fnatic",
+     "color": "red",
+     "lines": [
+      {
+       "id": "C1b",
+       "say": "Then came the backlash, from fans and from other players.",
+       "cap": "Then came the backlash, from fans and from other players."
+      }
+     ],
+     "hold": 1.7
+    },
+    {
+     "kicker": "THE ANSWER",
+     "headline": "FORFEIT",
+     "sub": "First forfeit in Major history",
+     "color": "red",
+     "lines": [
+      {
+       "id": "C2",
+       "say": "Fnatic refused. They forfeited instead. A first in Major history.",
+       "cap": "fnatic refused. They forfeited instead. A first in Major history."
+      }
+     ],
+     "hold": 1.7
+    },
+    {
+     "kicker": "THE ENDING",
+     "headline": "LDLC WIN THE MAJOR",
+     "sub": "Beating NiP 2–1 in the final",
+     "color": "ct",
+     "lines": [
+      {
+       "id": "C3",
+       "say": "And Team LDLC went on to win the whole Major.",
+       "cap": "And Team LDLC went on to win the whole Major."
+      }
+     ],
+     "hold": 1.7
+    },
+    {
+     "headline": "FAIR OR NOT?",
+     "sub": "Comment below ▼",
+     "color": "red",
+     "hold": 2.2,
+     "lines": [
+      {
+       "id": "C4",
+       "say": "Was the forfeit fair? Tell me in the comments.",
+       "cap": "Was the forfeit fair? Tell me in the comments."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Counter-Strike (CS2 / CS:GO)",
+  "hero_color": "t", "opp_color": "ct",
+  "objective": "C4", "armor_text": "ARMOR 0",
+  "default_weapon": "AK-47", "default_weapon_class": "rifle", "hero_long_gun": true,
+  "weapon_class": {"AWP": "sniper", "SSG 08": "sniper", "SCAR-20": "sniper", "G3SG1": "sniper",
+                   "AK-47": "rifle", "M4A4": "rifle", "M4A1-S": "rifle", "FAMAS": "rifle", "GALIL": "rifle", "AUG": "rifle", "SG 553": "rifle",
+                   "DEAGLE": "pistol", "USP-S": "pistol", "GLOCK": "pistol", "P250": "pistol", "FIVE-SEVEN": "pistol", "TEC-9": "pistol", "CZ75": "pistol",
+                   "NOVA": "shotgun", "XM1014": "shotgun", "MAG-7": "shotgun", "KNIFE": "ability", "HE": "ability", "MOLOTOV": "ability"},
+  "sources_hint": "HLTV.org (matches, news), Liquipedia Counter-Strike (events, rosters, results)",
+  "radar_hint": "Use the community callout radar of the map version played at the time (e.g. Inferno 2015 vs CS2 Inferno). Trace walkable lanes, the bomb sites, covered areas, crates, pillars."
+}

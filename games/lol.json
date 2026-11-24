@@ -1,0 +1,9 @@
+{
+  "name": "League of Legends",
+  "hero_color": [96, 172, 255], "opp_color": [255, 84, 84],
+  "objective": "BARON", "armor_text": "LVL 18",
+  "default_weapon": "ABILITY", "default_weapon_class": "ability", "hero_long_gun": false,
+  "weapon_class": {"AUTO": "pistol", "ABILITY": "ability", "ULT": "ability", "SMITE": "ability", "FLASH": "ability"},
+  "sources_hint": "Liquipedia League of Legends, lol.fandom (Leaguepedia), gol.gg (game stats)",
+  "radar_hint": "Use the Summoner's Rift minimap area around the fight (river, pit, jungle walls as lanes/blocks). Use 'weapon' = champion or spell name in kill events (e.g. 'Ahri R')."
+}

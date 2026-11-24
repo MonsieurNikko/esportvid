@@ -1,0 +1,9 @@
+{
+  "name": "Overwatch 2",
+  "hero_color": [255, 158, 60], "opp_color": [96, 172, 255],
+  "objective": "PAYLOAD", "armor_text": "ULT 100%",
+  "default_weapon": "PRIMARY", "default_weapon_class": "rifle", "hero_long_gun": false,
+  "weapon_class": {"PRIMARY": "rifle", "WIDOWMAKER": "sniper", "ASHE": "sniper", "HANZO": "sniper", "CASSIDY": "pistol", "ULT": "ability", "ABILITY": "ability"},
+  "sources_hint": "Liquipedia Overwatch (OWL / OWCS events, rosters)",
+  "radar_hint": "Overwatch has no in-game minimap: trace a simplified top-down of the fight area (point, payload path, high ground as covered areas)."
+}

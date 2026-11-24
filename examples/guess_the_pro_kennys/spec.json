@@ -1,0 +1,116 @@
+{
+  "meta": {
+    "format": "guess_the_pro", "game": "cs", "series": "GUESS THE PRO", "episode": 1, "mood": "default",
+    "out": "GuessThePro_01_kennyS",
+    "highlight": {"f0rest": "ct", "GeT_RiGhT": "ct", "friberg": "ct", "Ninjas": "ct", "Pyjamas": "ct", "overtime": "red", "Kyiv": "gold"},
+    "base_hashtags": ["#cs2", "#csgo", "#counterstrike", "#esports", "#shorts"]
+  },
+  "voice": {"voice": "am_michael"},
+  "sources": [
+    "HLTV — NiP vs Titan, SLTV StarSeries XII (online, 20 Feb 2015): https://www.hltv.org/matches/2294315/ninjas-in-pyjamas-vs-titan-sltv-starseries-xii",
+    "HLTV — Video: kennyS vs NiP: https://www.hltv.org/news/14305/video-kennys-vs-nip",
+    "Liquipedia — StarSeries XII group stage: https://liquipedia.net/counterstrike/StarLadder/StarSeries/XII/Group_Stages",
+    "Wikipedia — ESL One Cologne 2014 (NiP champions); DreamHack Winter 2014 (NiP finalists)"
+  ],
+  "publish": {
+    "titles": ["kennyS 1v4 with 50 HP vs NiP — CS:GO clutch", "This 1v4 on Inferno sent Titan to Kyiv (CS:GO)", "Guess the pro: 1v4, 50 HP, no armor (CS:GO)"],
+    "description": "Round 30. 50 HP. No armor. Four Ninjas. Only real CS fans get this one 👀 Comment your guess before the reveal!",
+    "hashtags": ["#kennyS", "#NiP", "#clutch"],
+    "pinned": "Who should be Guess the Pro #2? 👇"
+  },
+  "sections": [
+    {"type": "cold_open", "enemies": 4, "title3d": "1 V 4", "punch_text": "GUESS WHO?",
+     "lines": [
+       {"id": "A1", "say": "One versus four. Fifty HP. No armor.", "cap": "One versus four. 50 HP. No armor."},
+       {"id": "A2", "say": "Guess who.", "role": "punch"}
+     ]},
+    {"type": "rewind"},
+    {"type": "context", "beats": [
+      {"kind": "score", "text3d": "15 - 14", "sub3d": "ROUND 30", "color": "t", "chip": "FEB 2015  ·  STARSERIES XII", "chip_color": "white", "chip_size": 60,
+       "lines": [{"id": "A4", "say": "Round thirty. You lead fifteen to fourteen.", "cap": "Round 30. You lead 15–14."}]},
+      {"kind": "lineup", "names": ["Xizt", "friberg", "f0rest", "GeT_RiGhT", "allu"], "long_gun": ["allu"], "color": "ct",
+       "chip": "NINJAS IN PYJAMAS", "chip_size": 80,
+       "facts": ["ESL ONE COLOGNE 2014 · MAJOR CHAMPIONS", {"text": "DREAMHACK WINTER 2014 · MAJOR FINALISTS", "at": "A6+2.2"}],
+       "lines": [{"id": "A5", "say": "Your opponent: Ninjas in Pyjamas."},
+                 {"id": "A6", "say": "Major champions in Cologne. Major finalists, three months ago."}]},
+      {"kind": "title", "text3d": "KYIV", "color": "gold", "chip": "WIN THE SERIES  →  LAN FINALS",
+       "lines": [{"id": "A7", "say": "Win the series, and you go to the LAN in Kyiv."}]},
+      {"kind": "alarm", "text3d": "OVERTIME?", "color": "red", "chip": "LOSE THIS ROUND  →  OVERTIME", "chip_size": 62,
+       "lines": [{"id": "A8", "say": "Lose this round, and it's overtime."}]}
+    ]},
+    {"type": "radar", "lead": 2.45, "tail": 0.3,
+     "map": {
+       "transform": {"x0": 600, "y0": 450, "sx": 190, "sy": 470, "k": 2.0},
+       "title": "INFERNO (2015)  ·  A SITE",
+       "lanes": [[760, 452, 795, 522], [866, 458, 940, 492], [904, 490, 942, 565], [668, 520, 900, 572], [676, 560, 714, 700], [700, 738, 862, 778],
+                 [676, 766, 742, 792], [642, 690, 680, 805], [798, 788, 876, 816], [818, 800, 946, 878], [664, 812, 800, 842]],
+       "sunny": [[856, 560, 906, 792], [904, 650, 946, 792]],
+       "covered": [[712, 570, 858, 740]],
+       "zones": [{"rect": [772, 628, 852, 732], "label": "A"}],
+       "crates": [[780, 700, 800, 722], [738, 598, 756, 616]],
+       "containers": [[800, 574, 836, 592]],
+       "pillars": [[724, 586], [724, 724], [846, 724], [760, 690]],
+       "labels": [["ARCH", 777, 478, 90, 22], ["LIBRARY", 923, 530, 90, 20], ["KITCHEN", 900, 474, 0, 18], ["ARCH SIDE", 720, 546, 0, 20],
+                  ["CLOSE", 695, 628, 90, 20], ["LONG A", 881, 600, 90, 22], ["GRAVEYARD", 925, 722, 90, 18], ["TRUCK SIDE", 812, 760, 0, 20],
+                  ["PATIO", 709, 780, 0, 16], ["APTS", 661, 740, 90, 18], ["BALCONY", 837, 803, 0, 16], ["PIT", 900, 850, 0, 22], ["LONG HALL", 728, 828, 0, 18]]
+     },
+     "score": {"left": "YOU", "right": "NiP", "before": "15 – 14", "after": "16 – 14", "sub": "ROUND 30  ·  MAP 1", "change_at": "B13+0.65"},
+     "hud": {"from": "B4-0.05", "hp": 50, "armor_text": "ARMOR 0",
+             "clock": [["B4-0.05", 34.9], ["B8+0.8", 33.5], ["B10+0.95", 28.5], ["B12+0.6", 26.5], ["B13+0.4", 25.5]]},
+     "duel_from": "B6+0.35",
+     "heartbeat": ["B4-0.05", "B13+0.7"],
+     "you": [
+       {"pts": [[692, 822], [790, 820], [845, 796], [872, 768], [875, 714]], "from": "B1+0.15", "to": "B2+0.75"},
+       {"pts": [[875, 714], [881, 700]], "from": "B3+0.35", "to": "B3+1.05"},
+       {"pts": [[881, 700], [881, 600], [858, 584], [800, 600], [745, 655]], "from": "B3+1.35", "to": "B3+3.55"}
+     ],
+     "mates": [
+       {"pts": [[680, 826], [800, 826], [848, 798], [881, 760], [881, 700]], "from": "B1+0.15", "to": "B2-0.25", "die": "B2+0.15", "carrier": true},
+       {"pts": [[668, 832], [790, 832], [842, 806], [870, 776], [876, 742]], "from": "B1+0.15", "to": "B2+0.35", "die": "B2+0.95"},
+       {"pts": [[660, 700], [661, 780], [710, 779], [752, 758]], "from": "B1+0.15", "to": "B2+1.35", "die": "B2+1.95"},
+       {"pts": [[672, 530], [695, 585], [697, 640]], "from": "B1+0.15", "to": "B2+2.35", "die": "B2+2.75"}
+     ],
+     "enemies": [
+       {"name": "allu", "appear": "B5+0.15", "entry": [922, 540], "final": [888, 615], "move_from": "B6+0.35", "label_side": "r", "tag": "AWP"},
+       {"name": "f0rest", "appear": "B5+0.65", "entry": [870, 850], "final": [830, 768], "move_from": "B6+0.35", "label_side": "r"},
+       {"name": "GeT_RiGhT", "appear": "B5+1.15", "entry": [778, 470], "final": [852, 580], "move_from": "B6+0.35", "label_side": "u"},
+       {"name": "friberg", "appear": "B5+1.65", "entry": [768, 488], "final": [790, 552], "move_from": "B6+0.35", "label_side": "l"}
+     ],
+     "events": [
+       {"type": "pickup", "at": "B3+1.15", "pos": [881, 700]},
+       {"type": "kill", "at": "B8+0.8", "victim": "allu", "weapon": "AWP"},
+       {"type": "shot", "at": "B9+0.95", "to": [812, 742], "weapon": "AWP"},
+       {"type": "shot", "at": "B9+2.35", "to": [836, 700], "weapon": "AWP"},
+       {"type": "kill", "at": "B10+0.95", "victim": "f0rest", "weapon": "AWP", "tag": "WALL"},
+       {"type": "hit", "at": "B11+0.8", "hp": 24},
+       {"type": "kill", "at": "B12+0.6", "victim": "GeT_RiGhT", "weapon": "AWP", "tag": "HS"},
+       {"type": "kill", "at": "B13+0.4", "victim": "friberg", "weapon": "AWP"}
+     ],
+     "stats": {"at": "B14-0.05", "items": [{"big": "4", "label": "KILLS"}, {"big": "~10s", "label": "ONE AWP"}], "note": "C4 NOT PLANTED",
+               "banner": "→  LAN FINALS · KYIV", "banner_at": "B15+0.1"},
+     "lines": [
+       {"id": "B1", "say": "Your team hits long A."},
+       {"id": "B2", "say": "One by one, they fall.", "gap": 1.16},
+       {"id": "B3", "say": "The bomb hits the floor. You grab it.", "gap": 1.58},
+       {"id": "B4", "say": "Now it's just you.", "gap": 0.75},
+       {"id": "B5", "say": "Fifty HP. No armor.", "cap": "50 HP. No armor.", "gap": 0.95},
+       {"id": "B6", "say": "Four Ninjas, closing in.", "gap": 0.1},
+       {"id": "B7", "say": "And the bomb isn't planted.", "gap": 1.29},
+       {"id": "B8", "say": "Their sniper first.", "gap": 1.2},
+       {"id": "B9", "say": "Two shots. No kill.", "gap": 0.91},
+       {"id": "B10", "say": "Then Forest. Through a crate.", "cap": "Then f0rest. Through a crate.", "gap": 2.04},
+       {"id": "B11", "say": "Twenty-four HP.", "cap": "24 HP.", "gap": 0.74},
+       {"id": "B12", "say": "Get Right. Headshot.", "cap": "GeT_RiGhT. Headshot.", "gap": 0.05},
+       {"id": "B13", "say": "And Freeberg.", "cap": "And friberg.", "gap": 0.35},
+       {"id": "B14", "say": "Four kills. One AWP. No plant.", "gap": 0.83},
+       {"id": "B15", "say": "Sixteen to fourteen. Next stop: Kyiv.", "cap": "16–14. Next stop: Kyiv.", "gap": 0.35}
+     ]},
+    {"type": "clue", "label": "LAST CLUE", "big": "“MAGIC STICK”",
+     "lines": [{"id": "C1", "say": "One last clue. Your AWP had a nickname."},
+               {"id": "C2", "say": "The Magic Stick.", "role": "big"}]},
+    {"type": "reveal", "question": "WHO ARE YOU?", "answer": "kennyS", "answer_sub": "TITAN  ·  STARSERIES XII  ·  2015",
+     "lines": [{"id": "D1", "say": "So, who are you? Comment your guess before three.", "role": "question"},
+               {"id": "D2", "say": "It's Kenny S.", "role": "answer"},
+               {"id": "D3", "say": "Got it right? Comment below.", "role": "cta"}]}
+  ]
+}

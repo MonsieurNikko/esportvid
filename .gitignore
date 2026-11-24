@@ -1,0 +1,6 @@
+models/
+examples/*/build/
+episodes/*/build/
+__pycache__/
+*.pyc
+*.part.mp4
