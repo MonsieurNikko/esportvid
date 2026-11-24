@@ -83,7 +83,7 @@ window.setup = (sched) => {
       o.light = new THREE.SpotLight(0x9cc4ff, 6000, 240, Math.PI / 6, 0.6, 1.5); o.light.position.set(o.x, 80, 40); o.light.target.position.set(o.x, 0, 0); o.light.castShadow = true; scene.add(o.light, o.light.target);
     }
     else if (b.kind === 'title') { o.x = 300 * (i + 1); o.main = text3d(b.text3d, 36, hex(b.color), 1.0); o.main.position.set(o.x, 14, 0); o.light = new THREE.PointLight(hex(b.color), 500, 160, 1.4); o.light.position.set(o.x, 30, 40); scene.add(o.light); }
-    else if (b.kind === 'alarm') { o.main = text3d(b.text3d, 38, hex(b.color), 0.9); o.main.position.set(0, 24, -60); }
+    else if (b.kind === 'alarm') { o.main = text3d(b.text3d, 30, hex(b.color), 0.9); o.main.position.set(0, 19, -60); }
     beatObjs.push(o);
   });
   window.ready2 = true;

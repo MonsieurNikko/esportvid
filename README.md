@@ -3,7 +3,7 @@
 Faceless esports / gaming shorts in one fixed house style:
 **3D stage intro** (hero under a spotlight, opponents, 3D titles, team line-up) → **tactical radar** of the play
 (kill feed, HP, clock, heartbeat) → **clue / cards / predict** → **reveal**, with Kokoro narration, voice-synced captions
-and synthesized sound. 1080×1920, 30 fps, 65–90 s (TikTok Creator Rewards needs > 1 min).
+and synthesized sound. 1080×1920, 30 fps, 62–70 s (TikTok Creator Rewards needs > 1 min). Watermark = your channel handle from `channel.json`.
 
 Formats: `guess_the_pro` · `play_that_changed` · `esports_scandals` · `predict_the_round` · `top3` (see `formats/`).
 Games: `cs` · `valorant` · `lol` · `overwatch` (see `games/`).

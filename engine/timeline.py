@@ -69,7 +69,7 @@ class Timeline:
                 rest = [l for l in s['lines'] if l.get('role') in ('answer', 'cta')]
                 t = self._place(q, t + 0.15, ty, i)
                 sec['count'] = [t + 0.2 + 0.6 * k for k in range(3)]; sec['R0'] = sec['count'][-1] + 0.6
-                t = self._place(rest, sec['R0'] + 0.3, ty, i, 0.35) + 0.5
+                t = self._place(rest, sec['R0'] + 0.3, ty, i, 0.35) + s.get('tail', 0.5)
             else:
                 raise ValueError(f'unknown section type {ty}')
             sec['t1'] = t; self.sections.append(sec)

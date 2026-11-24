@@ -130,12 +130,12 @@ def chip(fr, d, txt, colour, y, s, al, size=72):
                         fill=(10, 12, 18, int(190 * al)), outline=colour + (int(255 * al),), width=4)
     blit(fr, img, W / 2, y, s, al)
 
-def series_tag(fr, label, accent):
-    d = ImageDraw.Draw(fr, 'RGBA')
-    img = text_img(label, F(INTER_K, 26), WHITE, shadow=False); w_ = img.width - 60
-    d.rounded_rectangle((W / 2 - w_ / 2 - 22, 136, W / 2 + w_ / 2 + 22, 176), 20, fill=(0, 0, 0, 150))
-    d.ellipse((W / 2 - w_ / 2 - 12, 151, W / 2 - w_ / 2 - 2, 161), fill=accent + (255,))
-    blit(fr, img, W / 2 + 6, 156, 1, 1)
+def watermark(fr, handle, accent):
+    """Channel handle, small and semi-transparent, bottom-left of the radar panel: outside TikTok/Shorts/Reels UI zones
+    (top tabs, right action rail, bottom-left caption block)."""
+    if not handle: return
+    img = text_img(handle, F(INTER_K, 28), WHITE, stroke=2, shadow=False)
+    blit(fr, img, 84, 1318, 1, 0.55, anchor='l')
 
 def crosshair_bg(d, t, a=16):
     cx, cy = W / 2, 900; r = 330 + 10 * math.sin(t * 0.8)

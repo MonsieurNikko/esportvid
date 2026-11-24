@@ -5,7 +5,7 @@ description: Make faceless esports/gaming shorts in Duy's fixed house style (3D 
 
 # esport-studio
 
-Turns a pro play (CS2 / CS:GO / VALORANT / LoL / Overwatch) into a 65–90 s vertical short for TikTok, YouTube Shorts and Reels,
+Turns a pro play (CS2 / CS:GO / VALORANT / LoL / Overwatch) into a 62–70 s vertical short for TikTok, YouTube Shorts and Reels,
 always in the same channel style. Everything is automated by one engine driven by a `spec.json`.
 Engine repo: `https://github.com/MonsieurNikko/esportvid` (private). On Windows it lives in `%USERPROFILE%\esportvid`.
 
@@ -31,6 +31,14 @@ cd esportvid && python setup.py --gpu
 ```
 Otherwise `git pull` in the folder. Needs Python 3.10+, ffmpeg in PATH (`winget install --id Gyan.FFmpeg -e`), Node not required.
 
+## Channel identity rule (always, before the first render)
+The video carries the **user's own channel handle** as watermark — never a generic series tag and never another creator's name.
+1. Look for `channel.json` in the episode folder, then the engine folder, then `~/.esportvid/channel.json`
+   (`{"handle": "@name", "name": "Channel Name"}`); also check the user's notes/memory for the channel name.
+2. If none is found, or it is the placeholder `@yourchannel`, **ask the user** for the handle. If they have no channel yet,
+   render with the placeholder and say clearly that it must be replaced and re-rendered before publishing.
+3. Save the answer to `<engine>/channel.json` so every future episode uses it.
+
 ## Pipeline
 1. **Ingest.** Input is a clip URL, the user's analysis (fiche), or both. If only a URL: use the `/watch` skill (claude-video)
    to extract frames + transcript, then write the analysis: event, date, stage, teams/rosters, map (+ version), score and round,
@@ -40,7 +48,7 @@ Otherwise `git pull` in the folder. Needs Python 3.10+, ffmpeg in PATH (`winget 
    ("two shots, no kill" — not "two misses" if the victim was damaged). Stakes must be exact (series vs map vs round).
    Find the **map radar** (callout map of the version played at the time). If you cannot get an image, ask the user for one.
 3. **Script** from the format guide: second person "you" (Guess the Pro / Predict) or third person (Play That Changed /
-   Scandals), ≤ 12 words per line, one idea per line, 65–90 s total. `say` = spoken spelling ("Get Right", "Forest",
+   Scandals), ≤ 12 words per line, one idea per line, **62–70 s total** (never under 61 s). `say` = spoken spelling ("Get Right", "Forest",
    "sixteen to fourteen"), `cap` = written form ("GeT_RiGhT", "16–14"). Never a one-word line, never a line starting with "…".
    **Direct the voice** on every line (`docs/voice.md`): `emo` (calm/serious/tense/excited/shock/hype) and optional `intensity`
    0–1, plus at most one reaction tag like `[sigh]` or `[gasp]` where a human narrator would react. Rising intensity across
@@ -51,7 +59,7 @@ Otherwise `git pull` in the folder. Needs Python 3.10+, ffmpeg in PATH (`winget 
    radar image's pixel coordinates, then set `map.transform` so the action fills the panel. All event times are refs to
    lines (`"B8+0.8"`), never absolute seconds.
 5. **Check timing and look:**
-   `python -m engine.cli timeline episodes\<ep>\spec.json` → total must be **> 61 s** (TikTok Creator Rewards); adjust `gap`/`hold`.
+   `python -m engine.cli timeline episodes\<ep>\spec.json` → total must be **62–70 s** (> 61 s for TikTok Creator Rewards, shorter keeps completion high); cut lines or tighten `gap`/`hold`/`lead`.
    `python -m engine.cli build episodes\<ep>\spec.json --stills 2,8,15,30,45,60,70` → open the stills, check: nothing cropped,
    no text over text, names readable, kill feed correct, captions on ≤ 2 lines. Fix the spec, repeat.
 6. **Render:** `python -m engine.cli build episodes\<ep>\spec.json` → `<out>.mp4` + `publish.md` in the episode folder.
@@ -60,14 +68,14 @@ Otherwise `git pull` in the folder. Needs Python 3.10+, ffmpeg in PATH (`winget 
    comment), and the sources. Update `episodes/index.md` (number, subject, format, game, date) so episode numbers never repeat.
 
 ## Locked style (do not change per episode)
-`engine/style.py` (palette, Anton/Inter fonts, caption look, chips), the series tag on top, the 3D stage look, the radar look,
+`engine/style.py` (palette, Anton/Inter fonts, caption look, chips), the channel watermark (bottom-left of the panel, hidden on reveal/predict screens), the 3D stage look, the radar look,
 the signature score "theme C" (`engine/music.py`: same A-minor bell motif in every video, logo sting at 0 s, build in the
 context, full theme in the action, 0.4 s silence then the motif on the reveal, hard cut that loops), music ~15–20 % of the voice,
 voice engine Chatterbox (`python setup.py --gpu`) with Kokoro fallback. A new idea = a new spec or a new format guide, not new
 colours. If the user asks for a style change, change it in the engine for every future episode and say so.
 
 ## Platform and monetization rules
-- > 61 s for TikTok Creator Rewards; 1080×1920; first 2 s = the most striking moment (cold open), question asked in the first second.
+- 62–70 s (> 61 s for TikTok Creator Rewards); 1080×1920; first 2 s = the most striking moment (cold open), question asked in the first second.
 - Original animation only: never broadcast footage, stream VODs or casters' audio (Content ID + "reused content" policies).
 - Each episode must carry real research and a story (YouTube demonetizes generic, repetitive, mass-produced videos).
 - The 3D/radar is not realistic AI imagery → TikTok AI label not needed; turn it on if realistic AI visuals are ever added.

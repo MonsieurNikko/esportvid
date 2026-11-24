@@ -8,12 +8,16 @@ Visual events are written relative to narration lines, never in absolute seconds
 `"B8"` (line start) · `"B8.end"` (line end) · `"B8+0.8"` / `"B8-0.3"` (offset) · `"@start+0.6"` / `"@end-1"` (section bounds).
 The timeline is built from the measured voice durations, so if a line gets longer, everything after it moves with it.
 
+## channel.json (not in the spec)
+`{"handle": "@name", "name": "Channel"}` in the episode folder, the engine folder or `~/.esportvid/`. The handle is the
+watermark (bottom-left of the panel). Missing → no watermark + a warning; `@yourchannel` is a placeholder to replace.
+
 ## meta
 | key | meaning |
 |---|---|
 | `format` | `guess_the_pro`, `play_that_changed`, `esports_scandals`, `predict_the_round`, `top3` |
 | `game` | file in `games/` (`cs`, `valorant`, `lol`, `overwatch`) |
-| `series`, `episode` | shown in the top tag `SERIES · #N` (or set `series_tag` directly) |
+| `series`, `episode` | used for file names, publish kit and episode index (nothing is drawn on screen) |
 | `mood` | `default` (orange accent) or `dark` (red accent, unease drone — scandals) |
 | `out` | output file name (no extension) |
 | `highlight` | `{word: colour}` for captions (player names in team colour, `Kyiv` in gold…) |

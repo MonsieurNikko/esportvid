@@ -78,23 +78,6 @@
    "type": "context",
    "beats": [
     {
-     "kind": "score",
-     "text3d": "15 - 14",
-     "sub3d": "ROUND 30",
-     "color": "t",
-     "chip": "FEB 2015  ·  STARSERIES XII",
-     "chip_color": "white",
-     "chip_size": 60,
-     "lines": [
-      {
-       "id": "A4",
-       "say": "Round thirty. You lead fifteen to fourteen.",
-       "cap": "Round 30. You lead 15–14.",
-       "emo": "serious"
-      }
-     ]
-    },
-    {
      "kind": "lineup",
      "names": [
       "Xizt",
@@ -110,21 +93,20 @@
      "chip": "NINJAS IN PYJAMAS",
      "chip_size": 80,
      "facts": [
-      "ESL ONE COLOGNE 2014 · MAJOR CHAMPIONS",
       {
-       "text": "DREAMHACK WINTER 2014 · MAJOR FINALISTS",
-       "at": "A6+2.2"
+       "text": "FEB 2015 · STARSERIES XII",
+       "at": "A5+0.2"
+      },
+      {
+       "text": "ESL ONE COLOGNE 2014 · MAJOR CHAMPIONS",
+       "at": "A5+1.6"
       }
      ],
      "lines": [
       {
        "id": "A5",
-       "say": "Your opponent: Ninjas in Pyjamas.",
-       "emo": "serious"
-      },
-      {
-       "id": "A6",
-       "say": "Major champions in Cologne. Major finalists, three months ago.",
+       "say": "Your opponent: Ninjas in Pyjamas. Major champions.",
+       "cap": "Your opponent: Ninjas in Pyjamas. Major champions.",
        "emo": "serious"
       }
      ]
@@ -144,14 +126,15 @@
     },
     {
      "kind": "alarm",
-     "text3d": "OVERTIME?",
+     "text3d": "15 - 14",
      "color": "red",
-     "chip": "LOSE THIS ROUND  →  OVERTIME",
-     "chip_size": 62,
+     "chip": "ROUND 30  ·  LOSE IT  →  OVERTIME",
+     "chip_size": 58,
      "lines": [
       {
        "id": "A8",
-       "say": "Lose this round, and it's overtime.",
+       "say": "Round thirty. Fifteen to fourteen. Lose it, and it's overtime.",
+       "cap": "Round 30. 15–14. Lose it, and it's overtime.",
        "emo": "tense",
        "intensity": 0.7
       }
@@ -161,7 +144,7 @@
   },
   {
    "type": "radar",
-   "lead": 2.45,
+   "lead": 2.0,
    "tail": 0.3,
    "map": {
     "transform": {
@@ -617,7 +600,7 @@
    "enemies": [
     {
      "name": "allu",
-     "appear": "B5+0.15",
+     "appear": "B6-1.7",
      "entry": [
       922,
       540
@@ -632,7 +615,7 @@
     },
     {
      "name": "f0rest",
-     "appear": "B5+0.65",
+     "appear": "B6-1.2",
      "entry": [
       870,
       850
@@ -646,7 +629,7 @@
     },
     {
      "name": "GeT_RiGhT",
-     "appear": "B5+1.15",
+     "appear": "B6-0.7",
      "entry": [
       778,
       470
@@ -660,7 +643,7 @@
     },
     {
      "name": "friberg",
-     "appear": "B5+1.65",
+     "appear": "B6-0.2",
      "entry": [
       768,
       488
@@ -733,7 +716,7 @@
     }
    ],
    "stats": {
-    "at": "B14-0.05",
+    "at": "B13+1.0",
     "items": [
      {
       "big": "4",
@@ -763,7 +746,7 @@
     {
      "id": "B3",
      "say": "The bomb hits the floor. You grab it.",
-     "gap": 1.58,
+     "gap": 1.2,
      "emo": "serious"
     },
     {
@@ -774,30 +757,16 @@
      "intensity": 0.7
     },
     {
-     "id": "B5",
-     "say": "Fifty HP. No armor.",
-     "cap": "50 HP. No armor.",
-     "gap": 0.95,
-     "emo": "tense"
-    },
-    {
      "id": "B6",
      "say": "Four Ninjas, closing in.",
-     "gap": 0.1,
+     "gap": 1.6,
      "emo": "tense",
      "intensity": 0.7
     },
     {
-     "id": "B7",
-     "say": "And the bomb isn't planted.",
-     "gap": 1.29,
-     "emo": "tense",
-     "intensity": 0.75
-    },
-    {
      "id": "B8",
      "say": "Their sniper first.",
-     "gap": 1.2,
+     "gap": 1.5,
      "emo": "excited"
     },
     {
@@ -811,7 +780,7 @@
      "id": "B10",
      "say": "Then Forest. Through a crate.",
      "cap": "Then f0rest. Through a crate.",
-     "gap": 2.04,
+     "gap": 1.5,
      "emo": "shock"
     },
     {
@@ -839,17 +808,10 @@
      "intensity": 0.95
     },
     {
-     "id": "B14",
-     "say": "Four kills. One AWP. No plant.",
-     "gap": 0.83,
-     "emo": "excited",
-     "intensity": 0.8
-    },
-    {
      "id": "B15",
      "say": "Sixteen to fourteen. Next stop: Kyiv.",
      "cap": "16–14. Next stop: Kyiv.",
-     "gap": 0.35,
+     "gap": 2.3,
      "emo": "excited"
     }
    ]
@@ -861,8 +823,9 @@
    "lines": [
     {
      "id": "C1",
-     "say": "One last clue. Your AWP had a nickname.",
-     "emo": "serious"
+     "say": "Last clue: your AWP's nickname.",
+     "emo": "serious",
+     "cap": "Last clue: your AWP's nickname."
     },
     {
      "id": "C2",
@@ -890,14 +853,9 @@
      "say": "It's Kenny S.",
      "role": "answer",
      "emo": "hype"
-    },
-    {
-     "id": "D3",
-     "say": "Got it right? Comment below.",
-     "role": "cta",
-     "emo": "excited"
     }
-   ]
+   ],
+   "tail": 1.6
   }
  ]
 }

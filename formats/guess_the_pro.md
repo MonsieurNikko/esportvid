@@ -2,7 +2,7 @@
 
 **Promise:** "Can you name the player from the play?" Second-person story ("you"), answer hidden until the end.
 **Why it works:** open loop from second 1, comment bait ("comment your guess before 3"), rewatch loop.
-**Length:** 70–80 s (TikTok Creator Rewards needs > 60 s).
+**Length:** 62–70 s (TikTok Creator Rewards needs > 60 s; shorter = better completion).
 
 ## Section plan
 | # | section | content | voice (example) |

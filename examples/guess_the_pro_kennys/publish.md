@@ -14,7 +14,7 @@ Round 30. 50 HP. No armor. Four Ninjas. Only real CS fans get this one 👀 Comm
 Who should be Guess the Pro #2? 👇
 
 ## Checklist
-- [x] Duration 80.5s > 61s (TikTok Creator Rewards needs > 1 min)
+- [x] Duration 66.9s > 61s (TikTok Creator Rewards needs > 1 min)
 - [x] Original animation, synthesized sound, no broadcast footage (no Content ID risk)
 - [x] Facts sourced (4 sources in spec)
 - [x] Not realistic AI imagery -> TikTok AI label not required (turn it on if you add realistic AI visuals)
@@ -29,9 +29,9 @@ Who should be Guess the Pro #2? 👇
 ```
 cold_open    0.00 →   4.62
 rewind       4.62 →   5.12
-context      5.12 →  22.60
-radar       22.60 →  65.06
-clue        65.06 →  70.92
-reveal      70.92 →  80.49
-TOTAL 80.49s
+context      5.12 →  17.88
+radar       17.88 →  53.30
+clue        53.30 →  58.51
+reveal      58.51 →  66.85
+TOTAL 66.85s
 ```

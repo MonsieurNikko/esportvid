@@ -4,3 +4,4 @@ episodes/*/build/
 __pycache__/
 *.pyc
 *.part.mp4
+channel.json

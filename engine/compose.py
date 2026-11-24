@@ -4,7 +4,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageChops
 from . import style as S
 from .style import (W, H, FPS, F, ANTON, INTER_K, INTER_B, WHITE, GRAY, RED, col, text_img, caption_img, blit, chip, pop, prog,
-                    eo, clamp, lerp, crosshair_bg, series_tag)
+                    eo, clamp, lerp, crosshair_bg, watermark)
 from .radar import RadarScene
 
 def stage_schedule(tl, game, mood):
@@ -44,7 +44,8 @@ class Composer:
         info_f = self.wd / 'stage' / 'info.json'
         self.sinfo = {int(k): v for k, v in json.loads(info_f.read_text())['info'].items()} if info_f.exists() else {}
         self.caps = tl.captions()
-        self.tag = spec['meta'].get('series_tag') or f"{spec['meta'].get('series', 'GUESS THE PRO')}  ·  #{spec['meta'].get('episode', 1)}"
+        from .channel import load_channel
+        self.handle = load_channel(Path(workdir).parent).get('handle')
 
     # ------------------------------------------------------------ words colouring in captions
     def wcol(self, w):
@@ -206,11 +207,11 @@ class Composer:
         elif ty == 'clue': fr, shake = self.clue(sec, t, n)
         else: fr, shake = self.reveal(sec, t, n)
         if ty not in ('reveal', 'predict', 'rewind'):
-            y = 1400 if ty in ('cold_open', 'context') else 1460
+            y = 1460
             for (a, b, g) in self.caps:
                 if a <= t < b:
                     s, al = pop(t, a, b, dur=0.1, out=0.06); blit(fr, caption_img([(w, self.wcol(w)) for w in g], size=92, maxw=960), W / 2, y, s, al)
-        if ty != 'rewind': series_tag(fr, self.tag, self.accent)
+        if ty not in ('rewind', 'reveal', 'predict'): watermark(fr, self.handle, self.accent)
         if ty == 'reveal' and sec['R0'] <= t < sec['R0'] + 0.25:
             fr = Image.blend(fr, Image.new('RGB', (W, H), WHITE), 0.85 * (1 - prog(t, sec['R0'], sec['R0'] + 0.25)))
         if shake > 0.5:

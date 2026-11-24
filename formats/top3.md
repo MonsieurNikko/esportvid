@@ -3,7 +3,7 @@
 **Promise:** "Top 3 [AWP clutches at Majors / Valorant aces / Baron steals]". Countdown, #1 last.
 **Why:** search-friendly titles ("Top 3 … [game]"), and every item is reusable later in long 16:9 compilations
 (where YouTube ad revenue is much higher than Shorts).
-Series tag: `TOP 3 · #N`. Length 75–90 s → keep each item ≈ 20 s.
+Series tag: `TOP 3 · #N`. Length 62–75 s → keep each item ≈ 15–18 s.
 
 ## Section plan
 | # | section | content |
