@@ -47,7 +47,7 @@ dark=Image.new('RGBA',out.size,BG+(255,)); Image.alpha_composite(dark,out).conve
 # ---------- 3. watermark for videos (small reticle + @GGFEZ), transparent
 wmk=Image.new('RGBA',(520,90),(0,0,0,0)); d=ImageDraw.Draw(wmk)
 reticle(d,45,45,26,5,OR+(255,),dot=True)
-d.text((92,45),'@GGFEZ',font=F(INTER,40),fill=WH+(255,),anchor='lm',stroke_width=3,stroke_fill=(0,0,0,255))
+d.text((92,45),'@ggfezstudio',font=F(INTER,40),fill=WH+(255,),anchor='lm',stroke_width=3,stroke_fill=(0,0,0,255))
 wmk=wmk.crop(wmk.getbbox()); wmk.save('ggfez_watermark.png')
 
 # ---------- 4. YouTube banner 2560x1440 (safe area centre 1546x423)
