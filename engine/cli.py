@@ -63,6 +63,8 @@ def build(spec_path, workers=2, stills=None, audio_only=False):
                     '-bufsize', '10M', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', str(out)], check=True)
     from .publish import write_publish
     write_publish(spec, tl, spec_path.parent / 'publish.md')
+    from .cover import make_cover
+    make_cover(spec, spec_path.parent)
     print(f'done in {time.time() - t0:.0f}s -> {out}  ({tl.duration:.1f}s)', flush=True)
 
 def main():
@@ -71,8 +73,12 @@ def main():
     b.add_argument('--stills', default=None, help='comma-separated times to preview instead of rendering')
     b.add_argument('--audio-only', action='store_true', help='rebuild voice/music/mix, reuse rendered frames')
     t = sub.add_parser('timeline'); t.add_argument('spec')
+    c = sub.add_parser('cover'); c.add_argument('spec')
     a = ap.parse_args()
     if a.cmd == 'build': build(a.spec, a.workers, a.stills.split(',') if a.stills else None, a.audio_only)
+    elif a.cmd == 'cover':
+        import json; from .cover import make_cover
+        print(make_cover(json.load(open(a.spec, encoding='utf-8')), Path(a.spec).resolve().parent))
     elif a.cmd == 'timeline':
         wd = Path(a.spec).resolve().parent / 'build'; wd.mkdir(exist_ok=True); _, tl, _ = load_all(a.spec, wd); print(tl.report())
         for lid, L in sorted(tl.lines.items(), key=lambda kv: kv[1]['t']): print(f"  {lid:<5} {L['t']:6.2f} +{L['d']:.2f}  {L['cap']}")

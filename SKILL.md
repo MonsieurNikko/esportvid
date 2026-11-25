@@ -87,3 +87,10 @@ colours. If the user asks for a style change, change it in the engine for every 
 - `ffmpeg not found`: install it and open a new terminal.
 - Voice sounds odd on a line: rewrite that `say` (shorter, no ellipsis, names spelled phonetically) and rebuild.
 - `[voice check] … words/s` warning: listen to that line, it may be glitched.
+
+## Cover (thumbnail) rule
+`build` also writes `cover.jpg` (`python -m engine.cli cover spec.json` to redo it alone). Set `spec.cover`
+(`frame` = 3D stage frame index, `kicker`, `headline`, `tag`). Keep every key element in y 420–1500
+(TikTok square grid crop, inside Instagram's 3:4 crop), nothing in the bottom 300 px (TikTok caption bar),
+and never put the answer (player name) on the cover or in the title. Upload it as the TikTok cover, the
+Reels cover and the Shorts thumbnail (YouTube Studio desktop, YPP only; otherwise pick the frame).
