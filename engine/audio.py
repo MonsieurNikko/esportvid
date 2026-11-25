@@ -94,9 +94,12 @@ def build_audio(tl, game, workdir, out_wav, mood='default'):
                 if ty_ == 'pickup': m.add(m.blip(660), t, 0.35); m.add(m.blip(990), t + 0.09, 0.35)
                 if ty_ in ('kill', 'shot'):
                     cls = wcls.get(e.get('weapon', game.get('default_weapon')), dcls)
-                    m.add(m.gun(cls), t, 0.95 if ty_ == 'kill' else 0.6)
+                    if cls == 'ability': m.add(m.impact()[:int(0.9 * SR)] * 0.6, t)
+                    else: m.add(m.gun(cls), t, 0.95 if ty_ == 'kill' else 0.6)
                     if e.get('tag') == 'WALL': m.add(m.wood(), t + 0.02, 0.8)
                     if e.get('tag') == 'HS': m.add(m.ding(), t + 0.03, 0.9)
+                if ty_ in ('aoe', 'line'): m.add(m.whoosh(0.25), t - 0.05, 0.45)
+                if ty_ == 'cast': m.add(m.whoosh(0.35), t - 0.1, 0.55); m.add(m.blip(740 if e['by'] == 'hero' else 520, 0.1), t, 0.2)
                 if ty_ == 'hit': m.add(m.thud(65, 0.4), t, 1.0); m.add(np.sin(2 * np.pi * 3100 * m.tt(1.4)) * m.env(1.4, 0.05, 2.5) * 0.06, t + 0.05)
             if S.get('heartbeat'):
                 a, b = R(S['heartbeat'][0]), R(S['heartbeat'][1]); t = a

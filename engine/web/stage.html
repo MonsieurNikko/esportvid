@@ -34,8 +34,8 @@ function makeChar(color, longGun = false) {
   const gunM = M(0x15171c, {roughness: 0.4, metalness: 0.5});
   const gun = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.8, longGun ? 10 : 6.5), gunM); gun.position.set(1.4, 7.6, longGun ? 4.2 : 3.0);
   const visor = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.7, 1.0), new THREE.MeshStandardMaterial({color: 0x0b0d12, roughness: 0.2, metalness: 0.6, emissive: color, emissiveIntensity: 0.25})); visor.position.set(0, 11.0, 1.55);
-  body.add(torso, l1, l2, head, cap, gun, visor);
-  if (longGun) { const sc = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.45, 3.2, 12), gunM); sc.rotation.x = Math.PI / 2; sc.position.set(1.4, 8.5, 3.6); body.add(sc); }
+  body.add(torso, l1, l2, head, cap, visor); const armed = S.guns !== false; if (armed) body.add(gun);
+  if (armed && longGun) { const sc = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.45, 3.2, 12), gunM); sc.rotation.x = Math.PI / 2; sc.position.set(1.4, 8.5, 3.6); body.add(sc); }
   body.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
   scene.add(g); return {g, body, mat};
 }

@@ -13,7 +13,7 @@ def stage_schedule(tl, game, mood):
     ctx = next((s for s in tl.sections if s['type'] == 'context'), None)
     if not cold and not ctx: return None
     sched = dict(hero_color=list(col(game['hero_color'])), opp_color=list(col(game['opp_color'])), mood=mood,
-                 hero_long_gun=game.get('hero_long_gun', True), cold=dict(t0=0, t1=0, enemies=0), beats=[], rise=dict(t0=1e9, t1=1e9))
+                 hero_long_gun=game.get('hero_long_gun', True), guns=game.get('guns', True), cold=dict(t0=0, t1=0, enemies=0), beats=[], rise=dict(t0=1e9, t1=1e9))
     if cold:
         cs = cold['spec']; punch = [tl.lines[l['id']]['t'] for l in cs.get('lines', []) if l.get('role') == 'punch']
         sched['cold'] = dict(t0=cold['t0'], t1=cold['t1'], enemies=cs.get('enemies', 0), title3d=cs.get('title3d'),
@@ -69,7 +69,8 @@ class Composer:
         fr, info = self.stage_frame(t); d = ImageDraw.Draw(fr, 'RGBA'); cs = sec['spec']
         punch = next((self.tl.lines[l['id']] for l in cs.get('lines', []) if l.get('role') == 'punch'), None)
         if info:
-            if info['you'][2]: blit(fr, text_img('YOU', F(INTER_K, 30), WHITE, stroke=3), info['you'][0], info['you'][1] - 30, 1, 1)
+            lab = cs.get('you_label', 'YOU')
+            if info['you'][2] and lab: blit(fr, text_img(lab, F(INTER_K, 30), WHITE, stroke=3), info['you'][0], info['you'][1] - 30, 1, 1)
             if not punch or t < punch['t']:
                 for i, p in enumerate(info['hunt']):
                     a = eo(prog(t, sec['t0'] + 0.7 + i * 0.45, sec['t0'] + 1.0 + i * 0.45))

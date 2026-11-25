@@ -2,8 +2,8 @@
   "name": "League of Legends",
   "hero_color": [96, 172, 255], "opp_color": [255, 84, 84],
   "objective": "BARON", "armor_text": "LVL 18",
-  "default_weapon": "ABILITY", "default_weapon_class": "ability", "hero_long_gun": false,
+  "default_weapon": "ABILITY", "default_weapon_class": "ability", "hero_long_gun": false, "guns": false,
   "weapon_class": {"AUTO": "pistol", "ABILITY": "ability", "ULT": "ability", "SMITE": "ability", "FLASH": "ability"},
   "sources_hint": "Liquipedia League of Legends, lol.fandom (Leaguepedia), gol.gg (game stats)",
-  "radar_hint": "Use the Summoner's Rift minimap area around the fight (river, pit, jungle walls as lanes/blocks). Use 'weapon' = champion or spell name in kill events (e.g. 'Ahri R')."
+  "radar_hint": "Use the Summoner's Rift of that season (it changed in the 2015 preseason): navigation data or minimap for walls, turret coordinates to project positions (docs/evidence.md). Draw walls as `walls` polygons, abilities as cast/shadow/aoe/line events, spells and HP as `trackers`. Use 'weapon' = champion or spell name in kill events (e.g. 'Ahri R')."
 }

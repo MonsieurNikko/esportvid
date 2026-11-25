@@ -7,7 +7,7 @@ description: Make faceless esports/gaming shorts in Duy's fixed house style (3D 
 
 Turns a pro play (CS2 / CS:GO / VALORANT / LoL / Overwatch) into a 62–70 s vertical short for TikTok, YouTube Shorts and Reels,
 always in the same channel style. Everything is automated by one engine driven by a `spec.json`.
-Engine repo: `https://github.com/MonsieurNikko/esportvid` (private). On Windows it lives in `%USERPROFILE%\esportvid`.
+Engine repo: `https://github.com/MonsieurNikko/esportvid`. On Windows it lives in `%USERPROFILE%\esportvid`.
 
 ## Sub-skills (what the user can ask)
 | ask | do |
@@ -40,13 +40,21 @@ The video carries the **user's own channel handle** as watermark — never a gen
 3. Save the answer to `<engine>/channel.json` so every future episode uses it.
 
 ## Pipeline
+Evidence before pixels: research and think first, generate after. A radar drawn from memory or by eye is a guess, and a guess is wrong on screen.
+
 1. **Ingest.** Input is a clip URL, the user's analysis (fiche), or both. If only a URL: use the `/watch` skill (claude-video)
-   to extract frames + transcript, then write the analysis: event, date, stage, teams/rosters, map (+ version), score and round,
-   positions, every kill in order (killer, victim, weapon, HS/wallbang), HP changes, objective, outcome, what it changed.
+   to extract frames + transcript, **then reread the downloaded file at native resolution** (contact sheets and crops), and write the analysis: event, date, stage, teams/rosters, map (+ version), score and round,
+   positions, every kill in order (killer, victim, weapon, HS/wallbang), abilities and utilities, HP changes, objective, outcome, what it changed.
 2. **Research and fact-check** with the sources in `games/<game>.json` (`sources_hint`). Every claim the video makes must have a
    source; write them in `episodes/<NN>_<slug>/brief.md` and later in `spec.sources`. Ambiguous points are narrated vaguely or cut
    ("two shots, no kill" — not "two misses" if the victim was damaged). Stakes must be exact (series vs map vs round).
-   Find the **map radar** (callout map of the version played at the time). If you cannot get an image, ask the user for one.
+   Find the **map radar** (callout map of the version played at the time). If you cannot get an image or map data, ask the user for one.
+   **Evidence gate — read `docs/evidence.md` and pass it before writing a script line or a spec coordinate.** Passed when:
+   - every kill, position, ability, utility, HP change and stake is a row of the brief's evidence table, marked measured, sourced or inferred;
+   - the map geometry has a named source, and the positions are measured on it with a stated error;
+   - each key claim has been attacked (what would make it false?), and the contradictions are resolved by frames;
+   - the brief lists what is not claimed.
+   A row you cannot prove is cut or narrated vaguely. Report to the user what was measured and what stays uncertain.
 3. **Script** from the format guide: second person "you" (Guess the Pro / Predict) or third person (Play That Changed /
    Scandals), ≤ 12 words per line, one idea per line, **62–70 s total** (never under 61 s). `say` = spoken spelling ("Get Right", "Forest",
    "sixteen to fourteen"), `cap` = written form ("GeT_RiGhT", "16–14"). Never a one-word line, never a line starting with "…".
@@ -54,14 +62,15 @@ The video carries the **user's own channel handle** as watermark — never a gen
    0–1, plus at most one reaction tag like `[sigh]` or `[gasp]` where a human narrator would react. Rising intensity across
    the kills, `tense` before the reveal, `hype` on the answer. The user can edit these fields directly.
    Show the script (with emo/intensity) to the user before rendering when they are present.
-4. **Spec.** Copy the closest example (`examples/*/spec.json`) into `episodes/<NN>_<slug>/spec.json` and edit it
+4. **Spec**, transcribed from the evidence table (coordinates, order, timings, HP). Copy the closest example (`examples/*/spec.json`) into `episodes/<NN>_<slug>/spec.json` and edit it
    (reference: `docs/spec_schema.md`). Trace the radar: lanes, covered areas, bomb/objective zones, crates, labels in the
-   radar image's pixel coordinates, then set `map.transform` so the action fills the panel. All event times are refs to
+   radar image's pixel coordinates (`walls` polygons for organic maps; `cast`/`shadow`/`aoe`/`line` events and `trackers` for abilities), then set `map.transform` so the action fills the panel. All event times are refs to
    lines (`"B8+0.8"`), never absolute seconds.
 5. **Check timing and look:**
    `python -m engine.cli timeline episodes\<ep>\spec.json` → total must be **62–70 s** (> 61 s for TikTok Creator Rewards, shorter keeps completion high); cut lines or tighten `gap`/`hold`/`lead`.
    `python -m engine.cli build episodes\<ep>\spec.json --stills 2,8,15,30,45,60,70` → open the stills, check: nothing cropped,
-   no text over text, names readable, kill feed correct, captions on ≤ 2 lines. Fix the spec, repeat.
+   no text over text, names readable, kill feed correct, captions on ≤ 2 lines, **and each radar still matches the clip frame of the same moment**
+   (places, sides, order, HP). Include a still per kill and per ability. Fix the spec, repeat.
 6. **Render:** `python -m engine.cli build episodes\<ep>\spec.json` → `<out>.mp4` + `publish.md` in the episode folder.
    Voice-only tweaks afterwards: edit the lines, then `... build spec.json --audio-only` (re-mixes without re-rendering frames).
 7. **Deliver:** the mp4, the publish kit (2–3 titles "[what happened] [game]", description with a question, hashtags, pinned

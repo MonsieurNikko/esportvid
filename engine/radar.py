@@ -27,15 +27,24 @@ class RadarScene:
         # entities
         self.you = [dict(pts=self.TP(sg['pts']), a=R(sg['from']), b=R(sg['to'])) for sg in S['you']]
         self.mates = [dict(pts=self.TP(m['pts']), a=R(m['from']), b=R(m['to']), die=R(m['die']), carrier=m.get('carrier', False)) for m in S.get('mates', [])]
-        self.kills = [dict(t=R(e['at']), victim=e['victim'], weapon=e.get('weapon', game['default_weapon']), tag=e.get('tag'))
+        self.kills = [dict(t=R(e['at']), src=self.T(*e['from']) if e.get('from') else None, victim=e['victim'], weapon=e.get('weapon', game['default_weapon']), tag=e.get('tag'))
                       for e in S['events'] if e['type'] == 'kill']
         kt = {k['victim']: k['t'] for k in self.kills}
         self.enemies = {}
         for e in S['enemies']:
             die = kt.get(e['name'], 1e9)
-            self.enemies[e['name']] = dict(app=R(e['appear']), e=self.T(*e['entry']), f=self.T(*e['final']),
+            segs = [dict(pts=self.TP(sg['pts']), a=R(sg['from']), b=R(sg['to'])) for sg in e.get('path', [])]
+            self.enemies[e['name']] = dict(app=R(e['appear']), e=self.T(*e['entry']), f=segs[-1]['pts'][-1] if segs else self.T(*e['final']), segs=segs,
                                            m0=R(e.get('move_from', e['appear'])), m1=R(e['arrive']) if 'arrive' in e else die - 0.6,
                                            die=die, side=e.get('label_side', 'u'), tag=e.get('tag'))
+        # abilities: cast (label + optional dash line), shadow (ghost left on the map), aoe (circles), line (projectile)
+        P = lambda p: self.T(*p) if p else None
+        self.casts = [dict(t=R(e['at']), by=e['by'], label=e['label'], a=P(e.get('from')), b=P(e.get('to'))) for e in S['events'] if e['type'] == 'cast']
+        self.ghosts = [dict(t=R(e['at']), end=R(e['until']), by=e['by'], p=P(e['pos'])) for e in S['events'] if e['type'] == 'shadow']
+        self.aoes = [dict(t=R(e['at']), by=e['by'], ps=self.TP(e['pos']), r=e['r'] * self.k) for e in S['events'] if e['type'] == 'aoe']
+        self.lines_ = [dict(t=R(e['at']), by=e['by'], a=P(e['from']), b=P(e['to'])) for e in S['events'] if e['type'] == 'line']
+        self.trk = [dict(name=x['name'], by=x['by'], hp=[(R(r), v) for r, v in x.get('hp', [])],
+                         items=[(it[0], R(it[1]), R(it[2]) if len(it) > 2 else R(it[1])) for it in x.get('items', [])]) for x in S.get('trackers', [])]
         self.shots = [dict(t=R(e['at']), to=self.T(*e['to'])) for e in S['events'] if e['type'] == 'shot']
         self.hits = [dict(t=R(e['at']), hp=e['hp']) for e in S['events'] if e['type'] == 'hit']
         pk = [e for e in S['events'] if e['type'] == 'pickup']
@@ -83,6 +92,8 @@ class RadarScene:
         for r in M.get('lanes', []): d.rectangle(self.TR(r), fill=lane)
         for r in M.get('sunny', []): d.rectangle(self.TR(r), fill=(58, 54, 40, 255))
         for r in M.get('lanes', []) + M.get('sunny', []): d.rectangle(self.TR(r), outline=edge, width=2)
+        for poly in M.get('walls', []):   # polygons (organic walls, e.g. LoL jungle)
+            pts = self.TP(poly); d.polygon(pts, fill=(14, 17, 24, 255)); d.line(pts + pts[:1], fill=edge, width=3)
         for rr in M.get('covered', []):
             rr = self.TR(rr); d.rectangle(rr, fill=(26, 29, 37, 255), outline=(130, 138, 154, 255), width=4)
             for k in range(int(rr[0]) - 400, int(rr[2]), 20):
@@ -104,6 +115,9 @@ class RadarScene:
             im = text_img(txt, F(INTER_K, sz), (128, 136, 152), shadow=False)
             blit(m, im.rotate(ang, expand=True, resample=Image.BICUBIC) if ang else im, *self.T(x, y))
         if M.get('title'): blit(m, text_img(M['title'], F(INTER_K, 22), (100, 108, 124), shadow=False), 250, 500)
+        if M.get('clip'):
+            mask = Image.new('L', (W, H), 0); ImageDraw.Draw(mask).rounded_rectangle((PX0, PY0, PX1, PY1), 26, fill=255)
+            m = Image.composite(m, Image.new('RGBA', (W, H), (0, 0, 0, 0)), mask)
         return m.crop((PX0 - 10, PY0 - 10, PX1 + 10, PY1 + 10))
 
     # ---------------- state
@@ -113,7 +127,12 @@ class RadarScene:
             if t >= s['a']: seg = s
         if t < self.you[0]['a']: return self.you[0]['pts'][0]
         return path_pos(seg['pts'], t, seg['a'], seg['b'])
-    def nip_pos(self, n, t): d = self.enemies[n]; return path_pos([d['e'], d['f']], t, d['m0'], d['m1'])
+    def nip_pos(self, n, t):
+        d = self.enemies[n]
+        if d['segs']:
+            seg = next((s for s in reversed(d['segs']) if t >= s['a']), None)
+            return path_pos(seg['pts'], t, seg['a'], seg['b']) if seg else d['e']
+        return path_pos([d['e'], d['f']], t, d['m0'], d['m1'])
 
     # ---------------- draw
     def draw(self, fr, d, tg, accent):
@@ -147,7 +166,7 @@ class RadarScene:
         if t >= self.you[0]['a'] - 0.1:
             yp = self.you_pos(t)
             order = [k['victim'] for k in sorted(self.kills, key=lambda k: k['t'])]
-            if self.duel0 and self.duel0 <= t < (self.last_kill or 0) + 0.6 and order:
+            if self.duel0 and self.duel0 <= t < (self.last_kill or 0) + 0.6 and order and not self.trk:   # aim cone: shooters only
                 seq = [(self.duel0, order[0])] + [(sorted(self.kills, key=lambda k: k['t'])[i]['t'], order[i + 1]) for i in range(len(order) - 1)]
                 def ang_to(nm): q = self.nip_pos(nm, t); return math.degrees(math.atan2(q[1] - yp[1], q[0] - yp[0]))
                 cur, prev = seq[0], None
@@ -167,6 +186,7 @@ class RadarScene:
                 if q < 1:
                     ring(d, self.pickup['pos'], 20 + 50 * eo(q), self.hero_c, ea * (1 - q), 5)
                     blit(fr, text_img('+ ' + self.objective, F(INTER_K, 32), self.hero_c), self.pickup['pos'][0] - 90, self.pickup['pos'][1] - 30 - 30 * q, 1, mal * (1 - q))
+        self.draw_abilities(fr, d, t, yp, ea, mal)
         for nm, dd in self.enemies.items():
             if t < dd['app']: continue
             p = self.nip_pos(nm, t) if t < dd['die'] else dd['f']; s, al = pop(t, dd['app'], dur=0.2)
@@ -190,10 +210,11 @@ class RadarScene:
             q = prog(t, k['t'], k['t'] + 0.45); vp = self.enemies[k['victim']]['f']
             if q < 1:
                 a = ea * (1 - q)
-                d.line((yp[0], yp[1], vp[0], vp[1]), fill=(255, 230, 180, int(a * 0.35)), width=16)
-                d.line((yp[0], yp[1], vp[0], vp[1]), fill=(255, 255, 255, int(a)), width=5)
+                src = k['src'] or yp
+                d.line((src[0], src[1], vp[0], vp[1]), fill=(255, 230, 180, int(a * 0.35)), width=16)
+                d.line((src[0], src[1], vp[0], vp[1]), fill=(255, 255, 255, int(a)), width=5)
                 ring(d, vp, 18 + 80 * eo(q), RED, a, 6)
-                if q < 0.35: dot(d, yp, 34 * (1 - q), (255, 240, 200), outline=(255, 200, 120), ow=3, a=int(ea * (1 - q / 0.35)))
+                if q < 0.35: dot(d, src, 34 * (1 - q), (255, 240, 200), outline=(255, 200, 120), ow=3, a=int(ea * (1 - q / 0.35)))
                 shake = max(shake, 12 * (1 - prog(t, k['t'], k['t'] + 0.22)))
             if k['tag']:
                 s, al = pop(t, k['t'] + 0.05, k['t'] + 1.6, out=0.25)
@@ -204,8 +225,9 @@ class RadarScene:
                     for c_ in self.S['map'].get('crates', []):
                         cr = self.TR(c_); cx, cy = (cr[0] + cr[2]) / 2, (cr[1] + cr[3]) / 2
                         if _seg_dist((cx, cy), yp, vp) < 30: d.rectangle(cr, outline=(255, 90, 60, int(ea * (1 - q))), width=6)
+        self.draw_trackers(fr, d, t, mal)
         nk = sum(1 for k in self.kills if t >= k['t'])
-        if self.duel0 and t >= self.duel0 and self.kills:
+        if self.duel0 and t >= self.duel0 and self.kills and not self.trk:
             s, al = pop(t, self.duel0)
             pk = 1 + 0.25 * max([1 - prog(t, k['t'], k['t'] + 0.25) for k in self.kills if t >= k['t']] + [0])
             blit(fr, text_img(f'{nk}/{len(self.kills)}', F(ANTON, 76), self.hero_c if nk else GRAY), 480, 375, s * pk, al * mal)
@@ -251,6 +273,54 @@ class RadarScene:
                 s, al = pop(t, self.loc(bt), self.t_exit, out=0.3)
                 blit(fr, text_img(self.stats['banner'], F(ANTON, 66), self.hero_c, stroke=4), W / 2, 1290, s, al)
         return shake
+
+    # ---------------- abilities (MOBA / hero games)
+    def _col(self, by): return self.hero_c if by == 'hero' else self.opp_c
+    def draw_abilities(self, fr, d, t, yp, ea, mal):
+        for g in self.ghosts:
+            if not g['t'] <= t < g['end']: continue
+            c = self._col(g['by']); dot(d, g['p'], 15, (18, 18, 24), outline=c, ow=3, a=int(ea * 0.8))
+            blit(fr, text_img('SHADOW', F(INTER_K, 16), c, shadow=False), g['p'][0], g['p'][1] + 28, 1, 0.75 * mal)
+        for x in self.aoes:
+            q = prog(t, x['t'], x['t'] + 0.55)
+            if t >= x['t'] and q < 1:
+                for p in x['ps']:
+                    r = x['r'] * (0.35 + 0.65 * eo(min(1, q * 2))); d.ellipse((p[0] - r, p[1] - r, p[0] + r, p[1] + r), fill=self._col(x['by']) + (int(ea * 0.20 * (1 - q)),))
+                    ring(d, p, r, self._col(x['by']), ea * (1 - q), 5)
+        for x in self.lines_:
+            q = prog(t, x['t'], x['t'] + 0.5)
+            if t >= x['t'] and q < 1:
+                h = lerp2(x['a'], x['b'], eo(min(1, q * 2))); d.line((*x['a'], *h), fill=self._col(x['by']) + (int(ea * (1 - q)),), width=7); dot(d, h, 8, WHITE, a=int(ea * (1 - q)))
+        for c in self.casts:
+            if t < c['t'] or t > c['t'] + 1.25: continue
+            if any(o['by'] == c['by'] and c['t'] < o['t'] <= t for o in self.casts): continue   # latest label wins
+            col_ = self._col(c['by']); s, al = pop(t, c['t'], c['t'] + 1.25, out=0.25); q = prog(t, c['t'], c['t'] + 0.6)
+            if c['a'] and q < 1: d.line((*c['a'], *c['b']), fill=col_ + (int(ea * 0.7 * (1 - q)),), width=6)
+            p = yp if c['by'] == 'hero' else self.nip_pos(c['by'], t)
+            im = text_img(c['label'], F(ANTON, 46), col_, stroke=4); w2 = im.width / 2
+            x = clamp(p[0], PX0 + w2 + 10, PX1 - w2 - 10)
+            o = yp if c['by'] != 'hero' else min((self.nip_pos(n, t) for n, e in self.enemies.items() if e['app'] <= t < e['die']), key=lambda q_: (q_[0] - yp[0]) ** 2 + (q_[1] - yp[1]) ** 2, default=(0, 0))
+            up = p[1] <= o[1]                                       # label on the side away from the other player
+            y = p[1] + ((-100 if up else 70) if c['by'] == 'hero' else (-62 if up else 62))
+            blit(fr, im, x, clamp(y, PY0 + 34, PY1 - 60), s, al * mal)
+    def draw_trackers(self, fr, d, t, mal):
+        for i, x in enumerate(self.trk):
+            y = 352 + 60 * i; c = self._col(x['by']); a = int(255 * mal)
+            blit(fr, text_img(x['name'], F(INTER_K, 30), c), 74, y - 2, 1, mal, anchor='l')
+            if x['hp']:
+                v = x['hp'][0][1]
+                for j, (tt, hv) in enumerate(x['hp']):
+                    if t >= tt: v = lerp(x['hp'][j - 1][1] if j else hv, hv, eo(prog(t, tt, tt + 0.3)))
+                d.rounded_rectangle((206, y - 10, 444, y + 8), 7, fill=(255, 255, 255, int(a * 0.16)))
+                if v > 0.5: d.rounded_rectangle((206, y - 10, 206 + max(14, 2.38 * v), y + 8), 7, fill=(RED if v < 30 else (240, 240, 240)) + (a,))
+                blit(fr, text_img(f'{v:.0f}%', F(INTER_K, 26), RED if v < 30 else WHITE, shadow=False), 454, y - 1, 1, mal, anchor='l')
+            xx = 570
+            for lab, on, off in x['items']:
+                f = F(INTER_K, 20); w = int(f.getlength(lab)) + 22; used = t >= off; act = on <= t < off
+                flash = 1 - prog(t, on, on + 0.5) if t >= on else 0
+                fill = (34, 38, 48) if used else ((255, 214, 90) if act else c); tc = (92, 98, 112) if used else (14, 14, 20)
+                d.rounded_rectangle((xx - 4 * flash, y - 20 - 4 * flash, xx + w + 4 * flash, y + 16 + 4 * flash), 8, fill=fill + (a,), outline=(255, 255, 255, int(a * flash)) if flash else None, width=3)
+                d.text((xx + 11, y - 15), lab, font=f, fill=tc + (a,)); xx += w + 8
 
     def clock_at(self, t):
         C = self.clock

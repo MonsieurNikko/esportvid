@@ -36,7 +36,7 @@ Colours: names `t`, `ct`, `red`, `blue`, `gold`, `white`, `gray` or `[r, g, b]`.
 ## sections (in order)
 | type | what it shows | keys |
 |---|---|---|
-| `cold_open` | 3D hero under a spotlight, opponents appearing in the fog, 3D title | `enemies` (int), `title3d`, `title_color`, `punch_text`, `lines` |
+| `cold_open` | 3D hero under a spotlight, opponents appearing in the fog, 3D title | `enemies` (int), `title3d`, `title_color`, `punch_text`, `you_label` (default `YOU`, empty = hidden), `lines` |
 | `rewind` | 0.5 s tape-rewind effect back to the context | – |
 | `context` | 3D beats, one after the other | `beats`: list of beats (below) |
 | `radar` | top-down map with the action | see below |
@@ -56,17 +56,21 @@ Colours: names `t`, `ct`, `red`, `blue`, `gold`, `white`, `gray` or `[r, g, b]`.
 ### radar
 ```
 "map": {"transform": {"x0":600,"y0":450,"sx":190,"sy":470,"k":2.0}, "title": "...",
-        "lanes": [[x0,y0,x1,y1],...], "sunny": [...], "covered": [...], "zones": [{"rect":[...],"label":"A"}],
+        "lanes": [[x0,y0,x1,y1],...], "sunny": [...], "covered": [...], "walls": [[[x,y],...]], "clip": true, "zones": [{"rect":[...],"label":"A"}],
         "crates": [...], "containers": [...], "pillars": [[x,y],...], "labels": [["LONG A", x, y, angle, size], ...]},
 "score": {"left","right","before","after","sub","change_at"},
 "hud": {"from": ref, "hp": 50, "armor_text": "ARMOR 0", "clock": [[ref, seconds], ...]},
 "duel_from": ref, "heartbeat": [ref, ref],
 "you":   [{"pts": [[x,y],...], "from": ref, "to": ref}, ...],
 "mates": [{"pts": [...], "from": ref, "to": ref, "die": ref, "carrier": true}],
-"enemies": [{"name","appear","entry":[x,y],"final":[x,y],"move_from","arrive"(optional),"label_side":"u|d|l|r","tag"}],
+"enemies": [{"name","appear","entry":[x,y],"final":[x,y],"move_from","arrive"(optional),"label_side":"u|d|l|r","tag",
+             "path": [{"pts","from","to"}] (optional: multi-step moves, replaces entry→final; last point = death position, final ignored)}],
 "events": [{"type":"kill","at":ref,"victim","weapon","tag":"WALL|HS|null"}, {"type":"shot","at","to":[x,y],"weapon"},
+           {"type":"cast","at","by":"hero|<enemy>","label","from","to"}, {"type":"shadow","at","until","by","pos"},
+           {"type":"aoe","at","by","pos":[[x,y],...],"r"}, {"type":"line","at","by","from","to"},   // abilities; kill takes "from" too
            {"type":"hit","at","hp"}, {"type":"pickup","at","pos":[x,y]}],
 "stats": {"at": ref, "items": [{"big","label"},{"big","label"}], "note", "banner", "banner_at"},
+"trackers": [{"name","by","hp":[[ref,pct],...],"items":[["R",used_ref,(off_ref)],...]}],   // spell + HP rows, replaces the kill counter
 "hero_label": "???", "you_label": "YOU",   // names shown in the kill feed / on the hero dot
 "lead": 1.4, "tail": 0.6, "gap": 0.9,     // timing of the section
 "scene": "s1"   // two radar sections with the same scene share one clock (predict format)
